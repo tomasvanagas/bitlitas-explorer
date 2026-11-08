@@ -7015,6 +7015,9 @@ get_footer()
             {"api"                 , std::to_string(ONIONEXPLORER_RPC_VERSION_MAJOR)
                                      + "."
                                      + std::to_string(ONIONEXPLORER_RPC_VERSION_MINOR)},
+            // Bitlitas: the footer is rendered once, at startup, so
+            // keep the tag for each page render (add_css_style) to fill
+            {"current_year"        , string {"{{current_year}}"}},
     };
 
     string footer_html = mstch::render(xmreg::read(TMPL_FOOTER), footer_context);
@@ -7030,6 +7033,12 @@ add_css_style(mstch::map& context)
     context["css_styles"] = mstch::lambda{[&](const std::string& text) -> mstch::node {
         return template_file["css_styles"];
     }};
+
+    // Bitlitas: the footer's copyright year, current at each render
+    std::time_t now = std::time(nullptr);
+    std::tm now_utc {};
+    gmtime_r(&now, &now_utc);
+    context["current_year"] = std::to_string(1900 + now_utc.tm_year);
 }
 
 bool

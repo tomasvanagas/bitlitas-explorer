@@ -167,6 +167,9 @@ WORKDIR /app
 COPY --from=explorer-build /src/explorer/build/litblocks /app/litblocks
 COPY --from=explorer-build /src/explorer/build/templates /app/templates
 
+# Self-hosted CSS/JS/fonts/images, served at /static/<path>
+COPY --from=explorer-build /src/explorer/build/static /app/static
+
 # Fail the build here, not at startup, if a shared library is missing
 RUN ! ldd /app/litblocks | grep 'not found'
 
