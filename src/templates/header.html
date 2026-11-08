@@ -2,33 +2,93 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="shortcut icon" href="about:blank">
     <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
     {{#refresh}}
         <meta http-equiv="refresh" content="10">
     {{/refresh}}
-    <title>Onion Monero Blockchain Explorer</title>
-    <!--<link rel="stylesheet" type="text/css" href="/css/style.css">-->
-    <style type="text/css">
+    <title>BitLitas blokų naršyklė</title>
+	<meta name="description" content="Stebėkite bitlitų kriptovaliutos grandinės istoriją" />
+   
+	<meta name="google-site-verification" content="UylHHoLW4gph3cJKJq6jJ36hSvsxxMVQQ1QOMZHfsmM" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<meta property="og:url" content="https://explorer.bitlitas.lt"/>
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="BitLitas blokų naršyklė" />
+	<meta property="og:description" content="Bitlitų blokų grandinės naršyklė. Stebėkite, kaip keičiasi grandinė, kokie pervedimai vykdomi, kaip vyksta kasimas." />
+	<meta property="og:image" content="https://bitlitas.lt/img/fbshare_explorer.png" />
+
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+	<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	
+	<style type="text/css">
         {{#css_styles}}{{/css_styles}}
     </style>
+	
+	<link rel="shortcut icon" type="image/x-icon" href="https://pool.bitlitas.lt/themes/img/icon.ico">
 
+	 <script type="text/javascript">
+        $(function(){
+            $('.tx-input').click(function(){
+                $(this).next().next().toggle();
+            });
+        });
+    </script>
 </head>
-<body>
-<div>
+<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+	
+	<nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+					<i class="fa fa-bars"></i>
+				</button>
+				<a class="navbar-brand page-scroll" href="/">
+					<img class="coin-logo" src="https://pool.bitlitas.lt/themes/img/logo.png"> Blokų naršyklė
+				</a>
+			</div>
+			<div class="collapse navbar-collapse navbar-right navbar-main-collapse">
+				<ul class="nav navbar-nav">
+					<!-- Hidden li included to remove active class from about link when scrolled up past about section -->
+					<li class="hidden">
+						<a href="#page-top"></a>
+					</li>
+					<li ><a class="page-scroll" href="https://pool.bitlitas.lt" >Kasykla </a></li>
+					<li class="external-menu-link"><a class="page-scroll" href="https://bitlitas.lt" target="_blank">Bitlitas.lt <i class="fa fa-external-link"></i></a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	
 
-    <div class="center">
-        <h1 class="center"><a href="/">Onion Monero Blockchain Explorer</a></h1>
-        <h4 style="font-size: 15px; margin: 0px">(no javascript - no cookies - no web analytics trackers - no images - open sourced)</h4>
-    </div>
-
-
-    <div class="center">
-        <form action="/search" method="get" style="width:100%; margin-top:15px" class="style-1">
-            <input type="text" name="value" size="120"
-                   placeholder="block height, block hash, transaction hash">
-            <input type="submit" value="Search">
-        </form>
-    </div>
-
-</div>
+<div id="explorer" class="container" style="margin-top: 100px;">
+    {{^testnet}}
+		<form action="/paieska" method="get" id="explorer-search" autocomplete="off">
+			 <div class="input-group">
+				<input class="form-control" type="text" name="value" size="120"
+					   placeholder="Ko ieškote?">
+				<span class="input-group-btn">
+					<button class="btn btn-explorer" type="submit" id="lookUp">
+					<span><i class="fa fa-search"></i> Ieškoti</span>
+					</button>
+				</span>
+			</div>
+		</form>
+        
+    {{/testnet}}
+    {{#testnet}}
+		<form action="/paieska" method="get" id="explorer-search" autocomplete="off">
+			 <div class="input-group">
+				<input  class="form-control" type="text" name="value" size="100"
+					   placeholder="Ko ieškote?">
+				<span class="input-group-btn">
+					<button class="btn btn-explorer" type="submit" id="lookUp">
+					<span><i class="fa fa-search"></i> Ieškoti</span>
+					</button>
+				</span>
+			</div>
+		</form>
+    {{/testnet}}

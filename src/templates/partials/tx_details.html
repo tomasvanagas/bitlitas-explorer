@@ -1,304 +1,276 @@
-
-<div>
-
-    <H4 style="margin:5px">Tx hash: {{tx_hash}}</H4>
-    {{#enable_mixins_details}}
-        <H5 style="margin:5px">Tx prefix hash: {{tx_prefix_hash}}</H5>
-    {{/enable_mixins_details}}
-    <H5 style="margin:5px">Tx public key: <span id="tx_pub_key">{{tx_pub_key}}</span></H5>
-    <span id="add_tx_pub_keys" style="display: none;">{{add_tx_pub_keys}}</span>
-
-    {{#has_payment_id}}
-        <H5 style="margin:5px">Payment id: <span id="payment_id">{{payment_id}}</span></H5>
-    {{/has_payment_id}}
-
-    {{#has_payment_id8}}
-        <H5 style="margin:5px">Payment id (encrypted): <span id="payment_id">{{payment_id8}}</span></H5>
-    {{/has_payment_id8}}
-
-
-    {{#have_prev_hash}}
-        <H5>Previous tx: <a href="/tx/{{prev_hash}}">{{prev_hash}}</a></H5>
-    {{/have_prev_hash}}
-
-    {{#have_next_hash}}
-        <H5>Next tx: <a href="/tx/{{next_hash}}">{{next_hash}}</a></H5>
-    {{/have_next_hash}}
-
-
-
-    <table class="center" style="width: 80%; margin-top:10px">
-        {{^have_raw_tx}}
-        <tr>
-            <td>Timestamp: {{blk_timestamp_uint}}</td>
-            <td>Timestamp [UTC]: {{blk_timestamp}}</td>
-            <td>Age [y:d:h:m:s]: {{delta_time}}</td>
-        </tr>
-        {{/have_raw_tx}}
-        <tr>
-            <td>Block: <a href="/block/{{blk_height}}">{{blk_height}}</a></td>
-            <td>Fee (per_kB): {{tx_fee}} ({{payed_for_kB}})</td>
-            <td>Tx size: {{tx_size}} kB</td>
-        </tr>
-        <tr>
-            <td>Tx version: {{tx_version}}</td>
-            <td>No of confirmations: {{confirmations}}</td>
-            <td>RingCT/type:  {{#is_ringct}}yes/{{rct_type}}{{/is_ringct}}{{^is_ringct}}no{{/is_ringct}}</td>
-        </tr>
-
-
-        <tr>
-            <td colspan="3" style="max-width:700px">Extra: {{extra}}</td>
-        </tr>
-
-
-    </table>
-
-
-  <h3>{{outputs_no}} output(s) for total of {{outputs_xmr_sum}} xmr</h3>
-  <div class="center">
-      <table class="center">
-          <tr>
-              <td>stealth address</td>
-              <td>amount</td>
-              <td>amount idx</td>
-              <td>tag</td>
-          </tr>
-          {{#outputs}}
-          <tr>
-              <td>{{output_idx}}: {{out_pub_key}}</td>
-              <td>{{amount}}</td>
-              <td>{{amount_idx}} of {{num_outputs}}</td>
-              <td>{{output_tag}}</td>
-          </tr>
-          {{/outputs}}
-      </table>
-  </div>
-
-    {{^have_raw_tx}}
-    <div class="center" style="width:90%">
-        <div class="tabs">
-
-            <div class="tab">
-                <input type="radio" id="tab-1" name="tab-group-1" checked>
-                <label for="tab-1">Decode outputs</label>
-                <div class="content tab-1">
-                    <h4 style="margin: 0px">Check which outputs belong to given Monero address/subaddress and viewkey</h4>
-                    <h5 style="margin: 0px">
-                        For RingCT transactions, outputs' amounts are also decoded
-                        <br/>
-                        Note: address/subaddress and viewkey are sent to the server, as the calculations are done on the server side
-                    </h5>
-                    <form action="/myoutputs" method="post" style="width:100%; margin-top:2px" class="style-1">
-                        <input type="hidden" name="tx_hash" value="{{tx_hash}}"><br/>
-                        <input type="text" name="xmr_address" size="110" placeholder="Monero address/subaddress"><br/>
-                        <input type="text" name="viewkey" size="110" placeholder="Private viewkey" style="margin-top:5px"><br/>
-                        <input type="hidden" name="raw_tx_data" value="{{raw_tx_data}}">
-                        <!--above raw_tx_data field only used when checking raw tx data through tx pusher-->
-                        <input type="submit" value="Decode outputs" style="margin-top:5px" >
-                    </form>
-                </div>
-            </div>
-
-            <div class="tab">
-                <input type="radio" id="tab-2" name="tab-group-1">
-                <label for="tab-2">Prove sending</label>
-
-                <div class="content tab-2">
-                    <h4 style="margin: 0px">Prove to someone that you have sent them Monero in this transaction</h4>
-                    <h5 style="margin: 0px">
-                        Tx private key can be obtained using <i>get_tx_key</i>
-                        command in  <i>monero-wallet-cli</i> command line tool
-                        <br/>
-                        Note: address/subaddress and tx private key are sent to the server, as the calculations are done on the server side
-                    </h5>
-                    <form action="/prove" method="post" style="width:100%;margin-top:2px" class="style-1">
-                       <input type="hidden" name="txhash" value="{{tx_hash}}"><br/>
-                       <input type="text" name="txprvkey" size="120" placeholder="Tx private key"><br/>
-                        <input type="hidden" name="raw_tx_data" value="{{raw_tx_data}}">
-                        <!--above raw_tx_data field only used when checking raw tx data through tx pusher-->
-                       <input type="text" name="xmraddress" size="120" placeholder="Recipient's monero address/subaddress" style="margin-top:5px"><br/>
-                       <input type="submit" value="Prove sending" style="margin-top:5px">
-                    </form>
-                </div>
-            </div>
+	 <div class="panel panel-explorer panel-tx">
+          <div class="panel-heading">Pavedimas</div>
+		  {{#blk_found}}
+          <div class="row">
+            <div class="col-xs-12 col-sm-2">Tx hash: </div>
+            <div class="col-xs-12 col-sm-10" id="tx-hash">{{tx_hash}}</div>
+          </div>
+		  {{/blk_found}}
+          <div class="row">
+            <div class="col-xs-12 col-sm-2">Tx viešas raktas: </div>
+            <div class="col-xs-12 col-sm-10">{{tx_pub_key}}</div>
+          </div>
+		  
+		  {{#has_payment_id}}
+		  <div class="row">
+            <div class="col-xs-12 col-sm-2">Pavedimo ID: </div>
+            <div class="col-xs-12 col-sm-10">{{payment_id}}</div>
+          </div>
+		  {{/has_payment_id}}
+		  
+		  {{#has_payment_id8}}
+		  <div class="row">
+            <div class="col-xs-12 col-sm-2">Pavedimo ID (encrypted): </div>
+            <div class="col-xs-12 col-sm-10">{{payment_id8}}</div>
+          </div>
+		  {{/has_payment_id8}}
+		  
+		  {{#have_prev_hash}}
+		  <div class="row">
+            <div class="col-xs-12 col-sm-2">Ankstesnis tx: </div>
+            <div class="col-xs-12 col-sm-10">{{prev_hash}}</div>
+          </div>
+		  {{/have_prev_hash}}
+		  
+		  {{#have_next_hash}}
+		  <div class="row">
+            <div class="col-xs-12 col-sm-2">Sekantis tx: </div>
+            <div class="col-xs-12 col-sm-10">{{next_hash}}</div>
+          </div>
+		  {{/have_next_hash}}
+		  
+          <div class="row">
+            <div class="col-xs-12 col-sm-2">Blokas: </div>
+			{{#blk_found}}
+            <div class="col-xs-12 col-sm-10"><a href="/blokas/{{blk_height}}">{{blk_height}}</a></div>
+			{{/blk_found}}
+			{{^blk_found}}
+            <div class="col-xs-12 col-sm-10">N/A (tx vis dar vykdomas)</div>
+			{{/blk_found}}
+          </div>
+          <div class="row">
+            <div class="col-xs-12 col-sm-2">Viso suma: </div>
+            <div class="col-xs-12 col-sm-10">{{{outputs_xmr_sum}}}</div>
+          </div>
+		  {{^have_raw_tx}}
+          <!-- <div class="row"> -->
+            <!-- <div class="col-xs-12 col-sm-2">Timestamp:</div> -->
+            <!-- <div class="col-xs-12 col-sm-10">{{blk_timestamp_uint}}</div> -->
+          <!-- </div> -->
+          <div class="row">
+            <div class="col-xs-12 col-sm-2">Laikas [UTC]: </div>
+            <div class="col-xs-12 col-sm-10">{{blk_timestamp}}</div>
+          </div>
+          <!-- <div class="row"> -->
+            <!-- <div class="col-xs-12 col-sm-2">Age [y:d:h:m:s]: </div> -->
+            <!-- <div class="col-xs-12 col-sm-10">{{delta_time}}</div> -->
+          <!-- </div> -->
+		  {{/have_raw_tx}}
+          <div class="row">
+            <div class="col-xs-12 col-sm-2">Mokestis: </div>
+            <div class="col-xs-12 col-sm-10">{{tx_fee}}</div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12 col-sm-2">Tx dydis: </div>
+            <div class="col-xs-12 col-sm-10">{{tx_size}} Kb</div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12 col-sm-2">Tx versija: </div>
+            <div class="col-xs-12 col-sm-10">{{tx_version}}</div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12 col-sm-2">Patvirtinimų skaičiu: </div>
+            <div class="col-xs-12 col-sm-10" id="tx-confirmations"> {{confirmations}}</div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12 col-sm-2">Žiedas: </div>
+            <div class="col-xs-12 col-sm-10">{{#is_ringct}}taip/{{rct_type}}{{/is_ringct}}{{^is_ringct}}ne{{/is_ringct}}</div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12 col-sm-2">Papildomai: </div>
+            <div class="col-xs-12 col-sm-10">{{extra}}</div>
+          </div>
+     </div>
+	 <div class="panel panel-explorer">
+        <div class="panel-heading">
+          {{outputs_no}} pavedimas(-ai) Į
+          
+        </div>
+        <div class="panel-body">
+          <div class="table-responsive">
+              <table class="table table-hover table-striped">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Slaptas adresas</th>
+                    <th>Suma</th>
+                    <th>Sumos indeksas</th>
+                  </tr>
+                </thead>
+                <tbody>
+				  {{#outputs}}
+                  <tr>
+					<td>{{output_idx}}</td>
+					<td>{{out_pub_key}}</td>
+					<td>{{{amount}}}</td>
+					<td>{{amount_idx}} iš {{num_outputs}}</td>
+                  </tr>
+				  {{/outputs}}
+                </tbody>
+              </table>
+          </div>
+        </div>
+     </div>
+	{{^have_raw_tx}}
+	{{#blk_found}}
+    <div class="tx-tools">
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active"><a href="#decode-outputs" aria-controls="decode-outputs" role="tab" data-toggle="tab">Iššifruoti pavedimus</a></li>
+          <li role="presentation"><a href="#prove-sending" aria-controls="prove-sending" role="tab" data-toggle="tab">Patvirtinti siuntimą</a></li>
+        </ul>
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="decode-outputs">
+            <h4 style="margin: 0px">Tikrinkite, kuris pavedimas priklauso Bitlitas adresui pagal adresą ir stebėjimo raktą</h4>
+			<h5 style="margin: 0px">
+                Žiedinių transakcijų pavedimų sumos taip pat yra iššifruojamos
+                <br/><br/>
+                <strong>Pastaba: adresas ir stebėjimo raktas yra siunčiamas į serverį, kuriame vyksta duomenų apdorojimas</strong>
+            </h5>
+            <form action="/myoutputs" method="get" style="padding-top:20px; max-width: 900px; margin: auto; text-align: center;" autocomplete="off">
+              <input type="hidden" name="tx_hash" value="{{tx_hash}}">
+              <div class="form-group">
+                <input type="text" class="form-control" id="inputBitlitasAddress" placeholder="Bitlitas adresas" name="lit_address"/>
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control" id="inputViewKey" placeholder="Privatus stebėjimo raktas" name="viewkey"/>
+				<input type="hidden" name="raw_tx_data" value="{{raw_tx_data}}">
+              </div>
+              <button type="submit" class="btn btn-explorer">Iššifruoti pavedimus</button>
+            </form>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="prove-sending">
+            <h4 style="margin: 0px">Patvirtinkite kam nors, kad siuntėte pavedimą šioje transakcijoje</h4>
+            <h5 style="margin: 0px">Tx privatus raktas gali būti gautas naudojant <code>get_tx_key</code>
+                komandą  <code>bitlitas-wallet-cli</code> terminale
+				<br/><br/>
+                <strong>Pastaba: adresas ir privatus tx raktas yra siunčiamas į serverį, kuriame vyksta duomenų apdorojimas</strong>
+			</h5>
+            <form action="/prove" method="get" style="max-width: 900px; margin: auto; text-align: center;" autocomplete="off">
+               <input type="hidden" name="txhash" value="{{tx_hash}}"><br/>
+              <div class="form-group">
+                <input type="text" class="form-control" id="inputTxPrivateKey" placeholder="Tx privatus raktas" name="txprvkey"/>
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control" id="inputRecipientBitlitasAddress" placeholder="Gavėjo adresas" name="litaddress"/>
+              </div>
+              <button type="submit" class="btn btn-explorer">Patvirtinti</button>
+            </form>
+          </div>
         </div>
     </div>
-    {{/have_raw_tx}}
-
-
-{{#has_inputs}}
-    {{#enable_mixins_details}}
-      <h3>Inputs' ring size time scale (from {{min_mix_time}} till {{max_mix_time}};
-        resolution: {{timescales_scale}} days{{#have_raw_tx}}; R - real ring member {{/have_raw_tx}})
-      </h3>
-      <div class="center">
-        <ul class="center">
-          {{#timescales}}
-            <li  style="list-style-type: none; text-align: center; font-size: 8px">|{{timescale}}|</li>
-          {{/timescales}}
-        </ul>
-      </div>
-    {{/enable_mixins_details}}
-
-    {{^inputs_xmr_sum_not_zero}}
-        <h3>{{inputs_no}} input(s) for total of {{inputs_xmr_sum}} xmr</h3>
-    {{/inputs_xmr_sum_not_zero}}
-    {{#inputs_xmr_sum_not_zero}}
-        {{^have_any_unknown_amount}}
-            <h3>{{inputs_no}} inputs(s) for total of {{inputs_xmr_sum}} xmr</h3>
-        {{/have_any_unknown_amount}}
-        {{#have_any_unknown_amount}}
-            <h3>{{inputs_no}} inputs(s) for total of at least {{inputs_xmr_sum}} xmr</h3>
-        {{/have_any_unknown_amount}}
-    {{/inputs_xmr_sum_not_zero}}
-
-    {{#show_part_of_inputs}}
-        <h5 style="margin-top: 2px">
-           Only {{max_no_of_inputs_to_show}} inputs are shown. To see all,
-            click "<a href="/tx/{{tx_hash}}/1">more details</a>"
-        </h5>
-    {{/show_part_of_inputs}}
-
-    <div class="center">
-       <table class="center">
-      {{#inputs}}
-        <tr>
-          <td style="text-align: left;">
-              key image  {{input_idx}}: {{in_key_img}}
-              {{#have_raw_tx}}
-               Already spent:
-                {{#already_spent}}
-                    <span style="color: red; font-weight: bold;">True</span>
-                {{/already_spent}}
-              {{^already_spent}}
-                False
-              {{/already_spent}}
-
-              {{/have_raw_tx}}
-          </td>
-          <td>amount: {{amount}}</td>
-       </tr>
-          <tr>
-            <td colspan="2">
-                {{#enable_mixins_details}}
-                    <table style="width:100%; margin-bottom:20px">
-                    <tr>
-                      <td>ring members</td>
-                      {{#have_raw_tx}}
-                        <td>Is it real?</td>
-                      {{/have_raw_tx}}
-                      <td>blk</td>
-                      <td>ring size</td>
-                      <td>in/out</td>
-                      <td>timestamp</td>
-                      <td>age [y:d:h:m:s]</td>
-
-                    </tr>
-                 {{#mixins}}
-                    <tr>
-                      <td> - {{mix_idx}}: <a href="/tx/{{mix_tx_hash}}">{{mix_pub_key}}</a></td>
-                      {{#have_raw_tx}}
-                        {{#mix_is_it_real}}
-                            <td><span style="color: #008009;font-weight: bold">{{mix_is_it_real}}</span></td>
-                        {{/mix_is_it_real}}
-                        {{^mix_is_it_real}}
-                            <td>{{mix_is_it_real}}</td>
-                        {{/mix_is_it_real}}
-                      {{/have_raw_tx}}
-                      <td>{{mix_blk}}</td>
-                      <td>{{mix_mixin_no}}</td>
-                      <td>{{mix_inputs_no}}/{{mix_outputs_no}}</td>
-                      <td>{{mix_timestamp}}</td>
-                      <td>{{mix_age}}</td>
-                    </tr>
-                 {{/mixins}}
-                 </table>
-                {{/enable_mixins_details}}
-                {{^enable_mixins_details}}
-                <table style="width:100%; margin-bottom:20px">
-                    <tr>
-                        <td>ring members</td>
-                        {{#have_raw_tx}}
-                            <td>Is it real?</td>
-                        {{/have_raw_tx}}
-                        <td>blk</td>
-                    </tr>
-                    {{#mixins}}
-                    <tr>
-                        <td> - {{mix_idx}}: {{mix_pub_key}}</td>
-                        {{#have_raw_tx}}
-                            {{#mix_is_it_real}}
-                                <td><span style="color: #008009;font-weight: bold">{{mix_is_it_real}}</span></td>
-                            {{/mix_is_it_real}}
-                            {{^mix_is_it_real}}
-                                <td>{{mix_is_it_real}}</td>
-                            {{/mix_is_it_real}}
-                        {{/have_raw_tx}}
-                        <td>{{mix_blk}}</td>
-                    </tr>
-                    {{/mixins}}
-                </table>
-                {{/enable_mixins_details}}
-           </td>
-         </tr>
-
-<!--
-        {{#with_ring_signatures}}
-
-          <tr>
-            <td colspan="2">
-                <table style="width:100%; margin-bottom:20px">
-                <tr>
-                  <td>Ring signature</td>
-                </tr>
-                {{#ring_sigs}}
-                <tr>
-                    <td>{{ring_sig}}</td>
-                </tr>
-                {{/ring_sigs}}
-             </table>
-           </td>
-         </tr>
-
-        {{/with_ring_signatures}}
--->
-
-      {{/inputs}}
-      </table>
-
-
-  </div>
-
-
- {{/has_inputs}}
-
-{{^have_raw_tx}}
-    {{^with_ring_signatures}}
-        {{#show_more_details_link}}
-            <h5 style="margin-top:1px">
-                <a href="/tx/{{tx_hash}}/1">More details</a>
-                {{#enable_as_hex}}
-                    | <a href="/txhex/{{tx_hash}}">Tx as hex</a>
-                    | <a href="/ringmembershex/{{tx_hash}}">Ring member outputs/mixins as hex</a>
-                    | <a href="/ringmemberstxhex/{{tx_hash}}">Full ring member txs as hex</a>
-                {{/enable_as_hex}}
-            </h5>
-        {{/show_more_details_link}}
-    {{/with_ring_signatures}}
-    {{#with_ring_signatures}}
-        <label id="show-decoded-inputs" for="toggle-1">Show JSON representation of tx</label>
-        <input type="checkbox" id="toggle-1">
-        <div id="decoded-inputs">
-            <div class="center">
-                <code style="white-space: pre-wrap; font-size: 10px">
-                    {{tx_json}}
-                </code>
-            </div>
+	<br/>
+    <br/>
+	{{/blk_found}}
+	{{/have_raw_tx}}
+    
+	{{#has_inputs}}
+    <div class="panel panel-explorer">
+        <div class="panel-heading">
+		  {{^inputs_xmr_sum_not_zero}}
+			{{inputs_no}} pavedimas(-ai) IŠ. Viso {{inputs_xmr_sum_short}} LIT
+		  {{/inputs_xmr_sum_not_zero}}
+		  {{#inputs_xmr_sum_not_zero}}
+			{{^have_any_unknown_amount}}
+			  {{inputs_no}} pavedimas(-ai) IŠ. Viso {{inputs_xmr_sum}} LIT
+			{{/have_any_unknown_amount}}
+			{{#have_any_unknown_amount}}
+			  {{inputs_no}} pavedimas(-ai) IŠ. Viso {{inputs_xmr_sum}} LIT
+			{{/have_any_unknown_amount}}
+		  {{/inputs_xmr_sum_not_zero}}
         </div>
-        <br/><br/>
-        <h5 style="margin-top:1px"><a href="/tx/{{tx_hash}}">Less details</a></h5>
-    {{/with_ring_signatures}}
-{{/have_raw_tx}}
-
-</div>
+        <div class="panel-body">
+          <div class="table-responsive">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th><span style="font-size:90%;font-weight:normal;">(spausk ant stulpelio norėdamas matyti daugiau)</span></th>
+					{{#have_raw_tx}}
+					<th>Jau išsiųsta?</th>
+					{{/have_raw_tx}}
+                    <th>Suma</th>
+                  </tr>
+                </thead>
+                <tbody>
+					{{#inputs}}
+                    <tr class="tx-input">
+                      <td>{{input_idx}}</td>
+                      <td>
+                        {{in_key_img}}
+                      </td>
+					  {{#have_raw_tx}}
+					  <td>
+						{{#already_spent}}
+							<span style="color: red; font-weight: bold;">True</span>
+						{{/already_spent}}
+						{{^already_spent}}
+							False
+						{{/already_spent}}
+					  </td>
+					  {{/have_raw_tx}}
+                      <td>{{{amount}}}</td>
+                    </tr>
+                    <tr style="display:none;"></tr>
+                    <tr class="tx-mixins-container">
+					  {{#have_raw_tx}}
+                      <td colspan="4">
+					  {{/have_raw_tx}}
+					  {{^have_raw_tx}}
+					  <td colspan="3">
+					  {{/have_raw_tx}}
+                        <div class="table-responsive">
+                            <table class="table tx-mixins">
+                              <thead>
+                                <tr>
+                                  <th>Mixin slaptas adresas</th>
+								  {{#have_raw_tx}}
+								  <th>Is it real?</th>
+								  {{/have_raw_tx}}
+                                  <th>blokas</th>
+                                  <th>mixin</th>
+                                  <th>į/iš</th>
+                                  <th>data</th>
+                                  <th>prieš [y:d:h:m:s]</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+								  {{#mixins}}
+                                  <tr>
+                                    <td> - {{mix_idx}}: {{mix_pub_key}}</td>
+									{{#have_raw_tx}}
+									  {{#mix_is_it_real}}
+										<td><span style="color: #008009;font-weight: bold">True</span></td>
+									  {{/mix_is_it_real}}
+									  {{^mix_is_it_real}}
+										<td>False</td>
+									  {{/mix_is_it_real}}
+								    {{/have_raw_tx}}
+                                    <td>{{mix_blk}}</td>
+                                    <td>{{mix_mixin_no}}</td>
+                                    <td>{{mix_inputs_no}}/{{mix_outputs_no}}</td>
+                                    <td>{{mix_timestamp}}</td>
+                                    <td>{{mix_age}}</td>
+                                  </tr>
+                                  {{/mixins}}
+                              </tbody>
+                            </table>
+                        </div>
+                      </td>
+                    </tr>
+					{{/inputs}}
+                </tbody>
+              </table>
+          </div>
+        </div>
+      </div>
+	{{/has_inputs}}

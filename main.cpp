@@ -214,10 +214,10 @@ main(int ac, const char* av[])
 
     string daemon_url {*daemon_url_opt};
 
-    if (testnet && daemon_url == "127.0.0.1:18081")
-        daemon_url = "127.0.0.1:28081";
-    if (stagenet && daemon_url == "127.0.0.1:18081")
-        daemon_url = "127.0.0.1:38081";
+    if (testnet && daemon_url == "127.0.0.1:18281")
+        daemon_url = "127.0.0.1:28281";
+    if (stagenet && daemon_url == "127.0.0.1:18281")
+        daemon_url = "127.0.0.1:38281";
         
     uint64_t mempool_info_timeout {5000};
 
@@ -337,12 +337,12 @@ main(int ac, const char* av[])
         return myxmr::htmlresponse(xmrblocks.index2());
     });
 
-    CROW_ROUTE(app, "/page/<uint>")
+    CROW_ROUTE(app, "/puslapis/<uint>")
     ([&](size_t page_no) {
         return myxmr::htmlresponse(xmrblocks.index2(page_no));
     });
 
-    CROW_ROUTE(app, "/block/<uint>")
+    CROW_ROUTE(app, "/blokas/<uint>")
     ([&](size_t block_height) {
         return myxmr::htmlresponse(xmrblocks.show_block(block_height));
     });
@@ -352,7 +352,7 @@ main(int ac, const char* av[])
         return myxmr::htmlresponse(xmrblocks.show_randomx(block_height));
     });
 
-    CROW_ROUTE(app, "/block/<string>")
+    CROW_ROUTE(app, "/blokas/<string>")
     ([&](string block_hash) {
         return myxmr::htmlresponse(
                 xmrblocks.show_block(remove_bad_chars(block_hash)));
@@ -628,7 +628,7 @@ main(int ac, const char* av[])
     }
 
 
-    CROW_ROUTE(app, "/search").methods("GET"_method)
+    CROW_ROUTE(app, "/paieska").methods("GET"_method)
     ([&](const crow::request& req) {
         return myxmr::htmlresponse(
                 xmrblocks.search(
@@ -655,7 +655,7 @@ main(int ac, const char* av[])
     CROW_ROUTE(app, "/robots.txt")
     ([&]() {
         string text = "User-agent: *\n"
-                      "Disallow: ";
+                      "Allow: /";
         return text;
     });
 
@@ -688,7 +688,7 @@ main(int ac, const char* av[])
             return r;
         });
 
-        CROW_ROUTE(app, "/api/block/<string>")
+        CROW_ROUTE(app, "/api/blokas/<string>")
         ([&](string block_no_or_hash) {
 
             myxmr::jsonresponse r{xmrblocks.json_block(remove_bad_chars(block_no_or_hash))};
@@ -696,7 +696,7 @@ main(int ac, const char* av[])
             return r;
         });
 
-        CROW_ROUTE(app, "/api/rawblock/<string>")
+        CROW_ROUTE(app, "/api/rawblokas/<string>")
         ([&](string block_no_or_hash) {
 
             myxmr::jsonresponse r{xmrblocks.json_rawblock(remove_bad_chars(block_no_or_hash))};

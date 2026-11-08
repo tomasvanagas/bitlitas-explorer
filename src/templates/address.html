@@ -1,7 +1,7 @@
 
 <div>
     <br/>
-    <H4 style="margin:5px">Address:<br/>{{xmr_address}}</H4>
+    <H4 style="margin:5px">Adresas:<br/>{{xmr_address}}</H4>
     <br/>
 
     {{#testnet}}
@@ -15,22 +15,20 @@
     {{/stagenet}}{{/testnet}}
 
     <br/>
-    <H4 style="margin:5px">Associated public keys</H4>
+    <H4 style="margin:5px">Priskitas viešas raktas</H4>
 
-    <H4 style="margin:5px">View key: {{public_viewkey}}</H4>
-    <H4 style="margin:5px">Spend key: {{public_spendkey}}</H4>
+    <H4 style="margin:5px">Stebėjimo raktas: {{public_viewkey}}</H4>
+    <H4 style="margin:5px">Išleidimo raktas: {{public_spendkey}}</H4>
     <br/>
 
     {{#is_integrated_addr}}
-        <H4 style="margin:5px">Payment id: {{encrypted_payment_id}}</H4>
+        <H4 style="margin:5px">Mokėjimo ID: {{encrypted_payment_id}}</H4>
     {{/is_integrated_addr}}
 
 
     <H4 style="margin:5px">
-        Transactions:<br/> Sorry, its not possible to find txs associated with
-        normal addresses in Monero
+        Pavedimai:<br/> Atsiprašome, tačiau nėra įmanoma rasti pavedimų susijusių su normaliu BitLitas adresu    
     </H4>
-
     <br/>
 
 </div>

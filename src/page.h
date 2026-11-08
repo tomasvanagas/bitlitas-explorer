@@ -1394,6 +1394,7 @@ show_tx(string tx_hash_str, uint16_t with_ring_signatures = 0, bool refresh_page
             {"stagenet"         , this->stagenet},
             {"txs"              , mstch::array{}},
             {"refresh"          , refresh_page},
+            {"enable_autorefresh_option", enable_autorefresh_option},
             {"tx_hash"          , tx_hash_str}
     };
 
@@ -6230,6 +6231,7 @@ construct_tx_context(transaction tx, uint16_t with_ring_signatures = 0)
             {"tx_hash"               , tx_hash_str},
             {"tx_prefix_hash"        , string{}},
             {"tx_pub_key"            , pod_to_hex(txd.pk)},
+            {"blk_found"             , tx_blk_found},          // Bitlitas templates
             {"blk_height"            , tx_blk_height_str},
             {"tx_blk_height"         , tx_blk_height},
             {"tx_size"               , fmt::format("{:0.4f}", tx_size)},

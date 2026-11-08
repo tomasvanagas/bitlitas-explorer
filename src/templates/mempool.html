@@ -1,38 +1,49 @@
-<h2 style="margin-bottom: 0px">
-   Transaction pool
-</h2>
-<h4 style="font-size: 12px; margin-top: 0px">(no of txs: {{mempool_size}}, size: {{mempool_size_kB}} kB, updated every {{ mempool_refresh_time }} seconds)</h4>
-<div class="center">
-    
-      <table class="center" style="width:80%">
-            <tr>
-                <td>age [h:m:s]</td>
-                <td>transaction hash</td>
-                <td>fee/per_kB [&#181;&#x271]</td>
-                <!--<td>outputs</td>-->
-                <td>in/out</td>
-                <td>tx size [kB]</td>
-            </tr>
-            {{#mempooltxs}}
-            <tr>
-                <td>{{age}}</td>
-                <td><a href="/tx/{{hash}}">{{hash}}</a></td>
-                <td>{{fee}}/{{payed_for_kB}}</td>
-                <!--<td>{{xmr_outputs}}</td>-->
-                <td>{{no_inputs}}/{{no_outputs}}</td>
-                <td>{{txsize}}</td>
-            </tr>
-            {{/mempooltxs}}
-        </table>
+<div class="panel panel-explorer">
+	 <div class="panel-heading">
+	   Vykdomi mokėjimai <small>(txs skaičius: {{mempool_size}}, dydis: {{mempool_size_kB}} kB)</small>
+	</div>
+	 <div class="panel-body">
+		 <div class="table-responsive">
+            <table class="table table-hover table-striped">
+				<thead>
+					<th><i class="fa fa-clock-o"></i> Senumas <!--(Δm)--></th>
+					<th><i class="fa fa-paw"></i> TX hash</th>
+					<th><i class="fa fa-tag"></i> Mokestis</th>
+					<th><i class="fa fa-money"></i> Suma</th>
+					<th><i class="fa fa-exchange"></i> Į/Iš</th>
+					<th><i class="fa fa-circle-o"></i> Žiedas</th>
+					<th><i class="fa fa-sitemap"></i> Mixin</th>
+					<th><i class="fa fa-floppy-o"></i> Dydis [kB]</th>
+				</thead>
+				<tbody>
+					{{#mempooltxs}}
+					<tr>
+						<td>{{age}}</td>
+						<td><a href="/tx/{{hash}}">{{hash}}</a></td>
+						<td>{{fee}}</td>
+						<td>{{{xmr_outputs}}}</td>
+						<td>{{no_inputs}}/{{no_outputs}}</td>
+						<td>
+							{{#is_ringct}}taip{{rct_type}}{{/is_ringct}}
+							{{^is_ringct}}ne{{/is_ringct}}
+						</td>
+						<td>{{mixin}}</td>
+						<td>{{txsize}}</td>
+					</tr>
+					{{/mempooltxs}}
+					{{^mempool_fits_on_front_page}}
+					  {{#partial_mempool_shown}}
+					  <tfoot>
+						<tr>
+						  <td colspan="8"><a href="/mempool">Only {{no_of_mempool_tx_of_frontpage}} txs shown. Click here to see all of them</a></td>
+						<tr>
+					  </tfoot>
+					  {{/partial_mempool_shown}}
 
-    {{^mempool_fits_on_front_page}}
-      {{#partial_mempool_shown}}
-      <div class="center" style="text-align: center; margin-bottom: 10px">
-          <a href="/txpool">Only {{no_of_mempool_tx_of_frontpage}} txs shown. Click here to see all of them</a>
-      </div>
-      {{/partial_mempool_shown}}
+					{{/mempool_fits_on_front_page}}
+				</tbody>
+			</table>
+		</div>
 
-    {{/mempool_fits_on_front_page}}
-
-
+	</div>
 </div>

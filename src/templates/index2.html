@@ -1,115 +1,80 @@
 
 <div class="center">
-     <h3 style="font-size: 12px; margin-top: 20px">
+    <h3 style="font-size: 14px; margin-top: 20px">
+       Serverio laikas (UTC): {{server_timestamp}} 
+       
+       {{#enable_autorefresh_option}}
+           {{#refresh}}
+              | <a href="/">Autorefresh is ON (10 s)</a>
+           {{/refresh}}
+           {{^refresh}}
+              | <a href="/autorefresh">Autorefresh is OFF</a>
+           {{/refresh}}
+       {{/enable_autorefresh_option}}
+        
+        {{#testnet}}
+         |
+           This is <span style="color:#ff6b62">testnet</span> blockchain
+        {{/testnet}}
 
-        Server time: {{server_timestamp}}  | <a href="/txpool">Transaction pool</a>
-         {{#enable_pusher}}
-            | <a href="/rawtx">Transaction pusher </a>
-         {{/enable_pusher}}
-         {{#enable_key_image_checker}}
-            | <a href="/rawkeyimgs">Key images checker</a>
-         {{/enable_key_image_checker}}
-         {{#enable_output_key_checker}}
-            | <a href="/rawoutputkeys">Output keys checker</a>
-         {{/enable_output_key_checker}}
-         {{#enable_autorefresh_option}}
-             |
-            {{#refresh}}
-                <a href="/">Autorefresh is ON (10 s)</a>
-            {{/refresh}}
-            {{^refresh}}
-               <a href="/autorefresh">Autorefresh is OFF</a>
-            {{/refresh}}
-         {{/enable_autorefresh_option}}
-         {{#testnet_url}}
-            | <a href="{{testnet_url}}">Go to testnet explorer</a>
-         {{/testnet_url}}
-         {{#stagenet_url}}
-            | <a href="{{stagenet_url}}">Go to stagenet explorer</a>
-         {{/stagenet_url}}
-         {{#mainnet_url}}
-            | <a href="{{mainnet_url}}">Go to mainnet explorer</a>
-         {{/mainnet_url}}
-         {{#testnet}}
-            | This is <span style="color:#ff6b62">testnet</span> blockchain
-         {{/testnet}}
-         {{#stagenet}}
-            | This is <span style="color:#ff6b62">stagenet</span> blockchain
-         {{/stagenet}}
-
-        </h3>
-
-
-    {{#network_info}}
-        <h3 style="font-size: 12px; margin-top: 5px; margin-bottom: 3">
-            Network difficulty: {{difficulty}}
-            | Hard fork: v{{current_hf_version}}
-            | Hash rate: {{hash_rate}}
-            | Fee per byte: {{fee_per_kb}}
-            | Median block size limit: {{block_size_limit}} kB
-            {{^is_current_info}}
-            | Data from {{age}} {{age_format}} ago
-            {{/is_current_info}}
-        </h3>
-    {{/network_info}}
-
-    {{#emission}}
-        <h3 style="font-size: 12px; margin-top: 2px">
-            Monero emission (fees) is {{amount}} ({{fee_amount}}) as of {{blk_no}} block
-        </h3>
-    {{/emission}}
-
-
+   </h3>
 </div>
 
-    {{{mempool_info}}}
+   {{{mempool_info}}}
 
-    {{#is_page_zero}}
-      <h2 style="margin-bottom: 0px">Transactions in the last {{no_of_last_blocks}} blocks</h2>
-    {{/is_page_zero}}
-    {{^is_page_zero}}
-      <h2 style="margin-bottom: 0px">Transactions in older blocks<!--(height: {{height}})--></h2>
-    {{/is_page_zero}}
+<div class="panel panel-explorer">
+   <div class="panel-heading">
+   {{#is_page_zero}}
+     Paskutinių 25 blokų pervedimai
+   {{/is_page_zero}}
+   {{^is_page_zero}}
+     Transactions in older blocks<!--(height: {{height}})-->
+   {{/is_page_zero}}
+   &nbsp;<small>(Blokų medianos dydis: {{blk_size_median}} kB)</small>
+   </div>
 
-    <h4 style="font-size: 14px; margin-top: 0px">(Median size of 100 blocks: {{blk_size_median}} kB)</h4>
-
-    <div class="center">
-
-            <table class="center">
-                <tr>
-                    <td>height</td>
-                    <td>age {{age_format}}<!--(Δm)--></td>
-                    <td>size [kB]<!--(Δm)--></td>
-                    <td>no txs</td>
-                    <td>transaction hash</td>
-                    <td>fee [&#181;&#x271]</td>
-                    <td>outputs</td>
-                    <td>in/out</td>
-                    <td>tx size [kB]</td>
-                </tr>
-                {{#txs}}
-                <tr>
-                    <td><a href="/block/{{height}}">{{height}}</a></td>
-                    <td>{{age}}<!--{{time_delta}}--></td>
-                    <td>{{blk_size}}</td>
-                    <td>{{no_txs}}</td>
-                    <td><a href="/tx/{{hash}}">{{hash}}</a></td>
-                    <td>{{fee_micro}}</td>
-                    <td>{{sum_outputs_short}}</td>
-                    <td>{{no_inputs}}/{{no_outputs}}</td>
-                    <td>{{tx_size_short}}</td>
-                </tr>
-                {{/txs}}
-            </table>
-
-            <div id="pages" class="center" style="text-align: center;">
-             {{^is_page_zero}}
-               <a href="/page/{{prev_page}}">previous page</a> |
-               <a href="/">first page</a> |
-             {{/is_page_zero}}
-                current page: {{page_no}}/<a href="/page/{{total_page_no}}">{{total_page_no}}</a>
-                | <a href="/page/{{next_page}}">next page</a>
-            </div>
-
-    </div>
-
+   <div class="panel-body">
+        <div class="table-responsive">
+           <table class="table table-hover table-striped">
+               <thead>
+                   <th><i class="fa fa-bars"></i> Aukštis</th>
+                   <th><i class="fa fa-clock-o"></i> Senumas {{age_format}}<!--(Δm)--></th>
+                   <th><i class="fa fa-paw"></i> TX hash</th>
+                   <th><i class="fa fa-tag"></i> Mokestis</th>
+                   <th><i class="fa fa-money"></i> Suma</th>
+                   <th><i class="fa fa-exchange"></i> Į/Iš</th>
+                   <th><i class="fa fa-circle-o"></i> Žiedas</th>
+                   <th><i class="fa fa-sitemap"></i> Mixin</th>
+                   <th><i class="fa fa-floppy-o"></i> Dydis [kB]</th>
+               </thead>
+               <tbody>
+                   {{#txs}}
+                   <tr>
+                       <td><a href="/blokas/{{height}}">{{height}}</a></td>
+                       <td>{{age}}<!--{{time_delta}}--></td>
+                       <td><a href="/tx/{{hash}}">{{hash}}</a></td>
+                       <td>{{tx_fee_short}}</td>
+                       <td>{{{sum_outputs_short}}}</td>
+                       <td>{{no_inputs}}/{{no_outputs}}</td>
+                       <td>
+                           {{#is_ringct}}taip/{{rct_type}}{{/is_ringct}}
+                           {{^is_ringct}}ne{{/is_ringct}}
+                       </td>
+                       <td>{{mixin}}</td>
+                       <td>{{tx_size_short}}</td>
+                   </tr>
+                   {{/txs}}
+               </tbody>
+           </table>
+       </div>
+       
+       <div id="pages" class="center" style="text-align: center;">
+        {{^is_page_zero}}
+          <a href="/puslapis/{{prev_page}}">ankstesnis puslapis</a> |
+          <a href="/">pirmas puslapis</a> |
+        {{/is_page_zero}}
+           dabartinis puslapis: {{page_no}}/<a href="/puslapis/{{total_page_no}}">{{total_page_no}}</a>
+           | <a href="/puslapis/{{next_page}}">sekantis puslapis</a>
+       </div>
+   </div>
+</div>

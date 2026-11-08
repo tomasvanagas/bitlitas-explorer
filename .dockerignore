@@ -1,0 +1,12 @@
+# .git stays in: the build reads the commit hash, date and
+# branch from it for the explorer's version info
+
+# Local build trees
+build
+cmake-build-*
+
+# Docker's own files: BuildKit reads them anyway, and leaving
+# them out of the copied source means editing them does not
+# force a recompile of the explorer
+Dockerfile
+.dockerignore

@@ -1,12 +1,18 @@
 cmake_minimum_required(VERSION 3.5.2)
 
 set(PROJECT_NAME
-        xmrblocks)
+        litblocks)
 
 
 project(${PROJECT_NAME})
 
 set(CMAKE_CXX_STANDARD 17)
+
+# Bitlitas: Crow uses Boost.Asio, not standalone Asio. The
+# daemon headers already pull in Boost.Asio, and Boost 1.74
+# (Ubuntu 22.04) leaks Asio's execution traits out of the
+# boost namespace, so both cannot share one translation unit.
+add_definitions(-DCROW_USE_BOOST)
 
 if (WIN32)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wa,-mbig-obj -O3")
