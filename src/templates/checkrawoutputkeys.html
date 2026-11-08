@@ -37,7 +37,7 @@
                         <tr>
                             <td>{{output_no}}</td>
                             <td><a href="/tx/{{tx_hash}}">{{output_pub_key}}</a></td>
-                            <td>{{timestamp}}</td>
+                            <td><span class="utc-time">{{timestamp}}</span></td>
                             <td>
 								{{#is_ringct}}Yes{{/is_ringct}}
 								{{^is_ringct}}No{{/is_ringct}}

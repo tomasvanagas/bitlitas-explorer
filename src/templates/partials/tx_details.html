@@ -58,8 +58,8 @@
             <!-- <div class="col-xs-12 col-sm-10">{{blk_timestamp_uint}}</div> -->
           <!-- </div> -->
           <div class="row">
-            <div class="col-xs-12 col-sm-2">Laikas [UTC]: </div>
-            <div class="col-xs-12 col-sm-10">{{blk_timestamp}}</div>
+            <div class="col-xs-12 col-sm-2">Laikas [<span class="utc-label">UTC</span>]: </div>
+            <div class="col-xs-12 col-sm-10"><span class="utc-time">{{blk_timestamp}}</span></div>
           </div>
           <!-- <div class="row"> -->
             <!-- <div class="col-xs-12 col-sm-2">Age [y:d:h:m:s]: </div> -->
@@ -258,7 +258,7 @@
                                     <td>{{mix_blk}}</td>
                                     <td>{{mix_mixin_no}}</td>
                                     <td>{{mix_inputs_no}}/{{mix_outputs_no}}</td>
-                                    <td>{{mix_timestamp}}</td>
+                                    <td><span class="utc-time">{{mix_timestamp}}</span></td>
                                     <td>{{mix_age}}</td>
                                   </tr>
                                   {{/mixins}}
